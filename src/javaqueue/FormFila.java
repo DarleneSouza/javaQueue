@@ -207,8 +207,9 @@ public class FormFila extends javax.swing.JFrame {
                 System.out.println("Nome:"+leitura[0]+ " RG= " + leitura[1] + " , Idade=" + leitura[2] + "");
                 p.setNome(leitura[0]);
                 p.setRg(leitura[1]);
-                p.setIdade(Integer.parseInt(leitura[2]));
-                filaNormal.add(p);
+                int idade = (Integer.parseInt(leitura[2]));
+                p.setIdade(idade);
+                addFila(p); // separar
             }// fim percurso no arquivo
             mostra();
         } catch (IOException e) {
@@ -221,12 +222,19 @@ public class FormFila extends javax.swing.JFrame {
            for(Pessoa p:filaNormal)
                listFilaNormal.append(p+"\n");
     }
+    void addFila(Pessoa p){
+       if(p.getIdade() < 60)
+           filaNormal.add(p);
+       else
+           filaPrioridade.add(p);
+    }
+    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Pessoa p = new Pessoa();
         p.setNome(txtNome.getText());
         p.setRg(txtRG.getText());
         p.setIdade(Integer.parseInt(txtIdade.getText()));
-        filaNormal.add(p);
+        addFila(p); // separar
         mostra();
         System.out.println(filaNormal);// console
     }//GEN-LAST:event_btnAddActionPerformed
