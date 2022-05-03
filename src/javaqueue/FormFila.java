@@ -8,7 +8,7 @@ public class FormFila extends javax.swing.JFrame {
             new ArrayDeque<Pessoa>();
     Queue<Pessoa> filaPrioridade = 
             new ArrayDeque<Pessoa>();
-
+    int contador = 0;
     public FormFila() {
         initComponents();
         carregaArquivo();
@@ -82,7 +82,6 @@ public class FormFila extends javax.swing.JFrame {
         txtIdade.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
         txtIdade.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Idade", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 18))); // NOI18N
 
-        btnAdd.setBackground(new java.awt.Color(255, 255, 255));
         btnAdd.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaqueue/add-user.png"))); // NOI18N
         btnAdd.setText("Adicionar Pessoa");
@@ -138,7 +137,6 @@ public class FormFila extends javax.swing.JFrame {
         listFilaPreferencial.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Fila Preferencial", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Light", 0, 24))); // NOI18N
         jScrollPane2.setViewportView(listFilaPreferencial);
 
-        btnAtender.setBackground(new java.awt.Color(255, 255, 255));
         btnAtender.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
         btnAtender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaqueue/doctor-atend.png"))); // NOI18N
         btnAtender.setText("Atender");
@@ -156,9 +154,9 @@ public class FormFila extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 389, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(244, 244, 244)
+                .addGap(238, 238, 238)
                 .addComponent(btnAtender, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -221,6 +219,25 @@ public class FormFila extends javax.swing.JFrame {
         if(!filaNormal.isEmpty())
            for(Pessoa p:filaNormal)
                listFilaNormal.append(p+"\n");
+        
+        listFilaPreferencial.setText("");
+        if(!filaPrioridade.isEmpty())
+            for(Pessoa p:filaPrioridade)
+                listFilaPreferencial.append(p+"\n");
+        
+    }
+    void atenderPreferencial(){
+        contador ++;
+            Pessoa p = new Pessoa();
+            p = filaPrioridade.remove();
+            lblProx.setText("Prox:"+p.getNome());
+            mostra();
+    }
+    void atenderNormal(){
+        Pessoa p = new Pessoa();
+            p = filaNormal.remove();// dequeue
+            lblProx.setText("Prox:"+p.getNome());
+            mostra();
     }
     void addFila(Pessoa p){
        if(p.getIdade() < 60)
@@ -240,14 +257,22 @@ public class FormFila extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnAtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtenderActionPerformed
+        if(!filaPrioridade.isEmpty()&&contador<3){
+            atenderPreferencial();
+        }
+        else{
+        contador =0;
         if(!filaNormal.isEmpty()){
-            Pessoa p = new Pessoa();
-            p = filaNormal.remove();// dequeue
-            lblProx.setText("Prox:"+p.getNome());
-            mostra();
+            atenderNormal();
         }// fim if
+        else if(!filaPrioridade.isEmpty()){
+            atenderPreferencial();
+        }
         else
             JOptionPane.showMessageDialog(null, "Fila Vazia");
+        }
+        
+        
     }//GEN-LAST:event_btnAtenderActionPerformed
 
     /**
